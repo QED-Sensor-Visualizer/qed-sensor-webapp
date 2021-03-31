@@ -1,1 +1,3 @@
-from kubipy.utils import minipy
+from scripts import sCall
+
+sCall("sudo fuser -k 3000/tcp")
