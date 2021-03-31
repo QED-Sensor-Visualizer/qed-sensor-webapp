@@ -4,7 +4,7 @@ import subprocess as sb
 
 
 def sCall(cmd):
-    return sb.run(cmd, shell=True)
+    return sb.run(cmd, shell=True, stdout=sb.DEVNULL, stderr=sb.DEVNULL)
 
 
 def sReturn(cmd):
@@ -12,7 +12,7 @@ def sReturn(cmd):
 
 
 def sOpen(cmd):
-    return sb.Popen(cmd, shell=True)
+    return sb.Popen(cmd, shell=True, stdout=sb.DEVNULL, stderr=sb.DEVNULL)
 
 
 def sKill(pro):
