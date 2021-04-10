@@ -2,12 +2,14 @@ from kubipy.utils import minipy
 import webbrowser
 
 from scripts import sCall, sOpen, sKill
+from kubipy.utils import minipy
 
 def openPorts():
-    grafanaInstance = sOpen('kubectl --namespace default port-forward $(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=visualizer-grafana-release" -o jsonpath="{.items[0].metadata.name}") 3000')
-    influxInstance = sOpen('kubectl --namespace default port-forward influxdb-release-5ccfb5b4d9-mwzd2 8086')
+    grafanaInstance = sOpen('kubectl port-forward svc/visualizer-release-grafana 3000:80')
+    influxInstance = sOpen('kubectl port-forward svc/visualizer-release-influxdb 8086:8086')
 
 if __name__ == '__main__':
+    sCall("minikube start")
     openPorts()
     #webbrowser.open("Site/index.html")
     webbrowser.open("http://localhost:3000/d/tPOgznlMz/sensor-dashboard?orgId=1")

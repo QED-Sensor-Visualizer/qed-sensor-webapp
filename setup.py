@@ -17,7 +17,8 @@ print("Installing Minikube...")
 #minikube installation
 cluster=minipy(False)
 cluster.install()
-
+cluster.start()
+sCall("minikube start")
 
 #HELM
 print("Installing Helm...")
@@ -46,6 +47,7 @@ builder = ChartBuilder(
                     "6.7.3",
                     "https://grafana.github.io/helm-charts",
                     "helm-charts"
+                    #values={"admin":{"userKey":"admin","passwordKey":"password"}}
                 ),
                 ChartDependency(
                     "influxdb",
@@ -71,7 +73,7 @@ builder.install_chart({"dependency-update": None})
 sCall("chmod -R +x ./")
 startVisual.openPorts()
 
-sCall('export INFLUX_TOKEN=$(kubectl get secret --namespace "default" influxdata -o jsonpath="{.data.admin-user-token}" | base64 --decode)')
+sCall('export INFLUX_TOKEN=$(kubectl get secret --namespace "default" influxdb -o jsonpath="{.data.admin-user-token}" | base64 --decode)')
 sCall('influx config create -n default -t $INFLUX_TOKEN -a -u http://localhost:8086')
 sCall('export INFLUX_ACTIVE_CONFIG="default"')
 sCall('influx config default')
