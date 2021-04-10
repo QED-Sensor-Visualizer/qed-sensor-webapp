@@ -1,3 +1,10 @@
+import os
+import sys
+if sys.version_info < (3, 0):
+    sys.stdout.write("Error: Requires Python 3.x\n")
+    sys.exit(1)
+import shutil
+
 from kubipy.utils import minipy
 from avionix import ChartBuilder, ChartInfo, ChartDependency
 
@@ -23,6 +30,9 @@ sCall("rm get_helm.sh")
 helmV=str(sReturn("helm version"))
 helmV=helmV[helmV.index("Version:")+10:helmV.index("\",")]
 
+try: shutil.rmtree("visualizer-release")
+except OSError as e: print("No previous installation was found")
+
 print("Generating Helm Charts...")
 builder = ChartBuilder(
     ChartInfo(
@@ -33,20 +43,19 @@ builder = ChartBuilder(
         dependencies=[
                 ChartDependency(
                     "grafana",
-                    "6.6.4",
+                    "6.7.3",
                     "https://grafana.github.io/helm-charts",
-                    "helm-charts",
-                    values={"admin":{"userKey":"admin","passwordKey":"password"}}
+                    "helm-charts"
                 ),
                 ChartDependency(
                     "influxdb",
-                    "1.8.4",
+                    "4.9.14",
                     "https://influxdata.github.io/helm-charts",
                     "influxdata/influxdb"
                 ),
                 ChartDependency(
                     "telegraf",
-                    "1.18.0",
+                    "1.7.38",
                     "https://influxdata.github.io/helm-charts",
                     "influxdata/telegraf"
                 )

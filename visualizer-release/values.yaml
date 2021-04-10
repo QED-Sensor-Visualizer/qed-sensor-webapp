@@ -1,4 +1,0 @@
-grafana:
-  admin:
-    passwordKey: password
-    userKey: admin
