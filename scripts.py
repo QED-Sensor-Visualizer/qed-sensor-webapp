@@ -8,7 +8,7 @@ def sCall(cmd):
 
 
 def sReturn(cmd):
-    return sb.check_output(cmd, stdout=sb.PIPE,shell=True, preexec_fn=os.setsid)
+    return sb.Popen(cmd, stdout=sb.PIPE,shell=True).communicate()[0]
 
 
 def sOpen(cmd):

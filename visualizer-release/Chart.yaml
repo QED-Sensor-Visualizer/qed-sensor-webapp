@@ -4,8 +4,11 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 6.6.4
-- name: influxdata
-  repository: https://helm.influxdata.com/
+- name: influxdb
+  repository: https://influxdata.github.io/helm-charts
   version: 1.8.4
+- name: telegraf
+  repository: https://influxdata.github.io/helm-charts
+  version: 1.18.0
 name: visualizer-release
 version: 0.1.0
