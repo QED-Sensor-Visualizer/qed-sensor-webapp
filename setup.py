@@ -12,7 +12,7 @@ from scripts import sCall, sReturn
 import startVisual
 import stopVisual
 
-"""
+
 print("Installing Minikube...")
 #minikube installation
 cluster=minipy(False)
@@ -25,7 +25,7 @@ sCall("curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/mas
 sCall("chmod 700 get_helm.sh")
 sCall("./get_helm.sh")
 sCall("rm get_helm.sh")
-"""
+
 
 helmV=str(sReturn("helm version"))
 helmV=helmV[helmV.index("Version:")+10:helmV.index("\",")]
