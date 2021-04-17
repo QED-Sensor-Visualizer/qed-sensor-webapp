@@ -20,6 +20,8 @@ def sKill(pro):
     os.killpg(os.getpgid(pro.pid), signal.SIGTERM)
 
 def getMinikube():
-    cluster=minipy()
+    cluster=minipy(False)
     cluster.install()
     cluster.start()
+    sCall("kubectl config view --raw >~/.kube/config")
+    sCall("minikube start")
