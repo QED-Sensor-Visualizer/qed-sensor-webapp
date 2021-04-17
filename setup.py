@@ -5,18 +5,20 @@ if sys.version_info < (3, 0):
     sys.exit(1)
 import shutil
 
+from kubernetes import client, config
 from avionix import ChartBuilder, ChartInfo, ChartDependency
 
 from scripts import sCall, sReturn
 import startVisual
 import stopVisual
 
-if str(sReturn("kubectl"))=="b''": 
+try: config.load_kube_config()
+except: 
     print("Error: Requires an active Kubernetes Cluster or Minikube Instance")
     sys.exit(1)
 
 #HELM
-print("Installing Helm...")
+print("Checking Helm...")
 sCall("curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3")
 sCall("chmod 700 get_helm.sh")
 sCall("./get_helm.sh")
