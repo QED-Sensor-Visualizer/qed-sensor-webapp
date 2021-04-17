@@ -15,7 +15,7 @@ import stopVisual
 try: config.load_kube_config()
 except: 
     print("Error: Requires an active Kubernetes Cluster or Minikube Instance")
-    sys.exit(1)
+    sys.exit()
 
 #HELM
 print("Checking Helm...")
