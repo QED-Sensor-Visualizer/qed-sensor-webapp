@@ -12,17 +12,20 @@ from scripts import sCall, sReturn, getMinikube
 import startVisual
 import stopVisual
 
-try: config.load_kube_config()
-except: 
-    print("Error: Requires an active Kubernetes Cluster or Minikube Instance")
-    print("Install Minikube? This requires a Homebrew install.")
-    answer=input().upper()
-    if "Y" in answer:
-        getMinikube()
-    else:
-        sys.exit()
+def kubStatus():
+    try: config.load_kube_config()
+    except: 
+        print("Error: Requires an active Kubernetes Cluster or Minikube Instance")
+        print("Install Minikube? This requires a Homebrew install.")
+        answer=input().upper()
+        if "Y" in answer:
+            getMinikube()
+        else:
+            sys.exit()
 
-#HELM
+if len(sys.argv)==0 or not "--skipMinikube" in sys.argv:
+    kubStatus()
+
 print("Checking Helm...")
 sCall("curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3")
 sCall("chmod 700 get_helm.sh")
