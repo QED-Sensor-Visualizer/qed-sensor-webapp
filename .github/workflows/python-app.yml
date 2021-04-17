@@ -36,4 +36,4 @@ jobs:
         python -c 'import scripts; scripts.getMinikube()'
     - name: Test with pytest
       run: |
-        python setup.py
+        python setup.py --skipMinikube
