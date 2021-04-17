@@ -6,10 +6,9 @@ if sys.version_info < (3, 0):
 import shutil
 
 from kubernetes import client, config
-from kubipy.utils import minipy
 from avionix import ChartBuilder, ChartInfo, ChartDependency
 
-from scripts import sCall, sReturn
+from scripts import sCall, sReturn, getMinikube
 import startVisual
 import stopVisual
 
@@ -19,9 +18,7 @@ except:
     print("Install Minikube? This requires a Homebrew install.")
     answer=input().upper()
     if "Y" in answer:
-        cluster=minipy()
-        cluster.install()
-        cluster.start()
+        getMinikube()
     else:
         sys.exit()
 

@@ -2,6 +2,7 @@ import os
 import signal
 import subprocess as sb
 
+from kubipy.utils import minipy
 
 def sCall(cmd):
     return sb.run(cmd, shell=True, stdout=sb.DEVNULL, stderr=sb.DEVNULL)
@@ -17,3 +18,8 @@ def sOpen(cmd):
 
 def sKill(pro):
     os.killpg(os.getpgid(pro.pid), signal.SIGTERM)
+
+def getMinikube():
+    cluster=minipy()
+    cluster.install()
+    cluster.start()
