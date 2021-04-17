@@ -26,8 +26,10 @@ sCall("rm get_helm.sh")
 helmV=str(sReturn("helm version"))
 helmV=helmV[helmV.index("Version:")+10:helmV.index("\",")]
 
-try: shutil.rmtree("visualizer-release")
-except OSError as e: print("No previous installation was found")
+if os.path.isdir("visualizer-release"):
+    print("Removing previous installation")
+    shutil.rmtree("visualizer-release")
+else: print("No previous installation was found")
 
 print("Generating Helm Charts...")
 builder = ChartBuilder(
@@ -66,6 +68,7 @@ sCall("helm repo remove influxdata/influxdb")
 sCall("helm repo remove influxdata/telegraf")
 builder.install_chart({"dependency-update": None})
 sCall("chmod -R +x ./")
+sCall('kubectl exec --namespace default -it -- $(kubectl get pods --namespace default -l "app=grafana,release=grafana" -o jsonpath="{.items[0].metadata.name}") grafana-cli admin reset-admin-password password')
 startVisual.openPorts()
 
 sCall('export INFLUX_TOKEN=$(kubectl get secret --namespace "default" influxdb -o jsonpath="{.data.admin-user-token}" | base64 --decode)')
