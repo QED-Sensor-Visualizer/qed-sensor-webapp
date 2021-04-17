@@ -6,6 +6,7 @@ if sys.version_info < (3, 0):
 import shutil
 
 from kubernetes import client, config
+from kubipy.utils import minipy
 from avionix import ChartBuilder, ChartInfo, ChartDependency
 
 from scripts import sCall, sReturn
@@ -15,7 +16,14 @@ import stopVisual
 try: config.load_kube_config()
 except: 
     print("Error: Requires an active Kubernetes Cluster or Minikube Instance")
-    sys.exit()
+    print("Install Minikube? This requires a Homebrew install.")
+    answer=input().upper()
+    if "Y" in answer:
+        cluster=minipy()
+        cluster.install()
+        cluster.start()
+    else:
+        sys.exit()
 
 #HELM
 print("Checking Helm...")
