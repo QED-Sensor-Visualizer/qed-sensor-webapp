@@ -5,20 +5,15 @@ if sys.version_info < (3, 0):
     sys.exit(1)
 import shutil
 
-from kubipy.utils import minipy
 from avionix import ChartBuilder, ChartInfo, ChartDependency
 
 from scripts import sCall, sReturn
 import startVisual
 import stopVisual
 
-
-print("Installing Minikube...")
-#minikube installation
-cluster=minipy(False)
-cluster.install()
-cluster.start()
-sCall("minikube start")
+if str(sReturn("kubectl"))=="b''": 
+    print("Error: Requires an active Kubernetes Cluster or Minikube Instance")
+    sys.exit(1)
 
 #HELM
 print("Installing Helm...")
