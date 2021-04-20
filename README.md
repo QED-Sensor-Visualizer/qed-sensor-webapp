@@ -9,13 +9,22 @@ This visualizer requires an active Kubernetes cluster or Minikube instance.
 Python3 is also required, along with several Pip packages. To install, run the following commands:
 
 ```bash
+pip install kubernetes
 pip install avionix
 ```
 
-To set up the visualizer, run the following command:
+The following Pip package is not required but can be used to install Minikube if Kubernetes/Docker is not set up:
+
+```bash
+pip install kubipy
+```
+
+To set up the visualizer, run the setup script:
 
 ```bash
 python3 setup.py
+
+#Optional arguments: '--skipMinikube' (skip the fallback Minikube installation) 
 ```
 
 This script verifies your Helm installation and generates an umbrella chart containing all the programs, which is deployed onto your current Kubernetes cluster. It also automatically sets up authentication info for the various components:
