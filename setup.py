@@ -36,9 +36,9 @@ sCall("rm get_helm.sh")
 helmV=str(sReturn("helm version"))
 helmV=helmV[helmV.index("Version:")+10:helmV.index("\",")]
 
-if os.path.isdir("visualizer-release"):
+if os.path.isdir("./visualizer-release"):
     print("Removing previous installation")
-    shutil.rmtree("visualizer-release")
+    shutil.rmtree("./visualizer-release")
 else: print("No previous installation was found")
 
 print("Generating Helm Charts...")
