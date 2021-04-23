@@ -58,9 +58,9 @@ builder = ChartBuilder(
                 ),
                 ChartDependency(
                     "influxdb",
-                    "4.9.14",
-                    "https://influxdata.github.io/helm-charts",
-                    "influxdata/influxdb"
+                    "2.2.1",
+                    "https://charts.bitnami.com/bitnami",
+                    "bitnami/influxdb"
                 ),
                 ChartDependency(
                     "telegraf",
