@@ -9,7 +9,7 @@ def sCall(cmd):
 
 
 def sReturn(cmd):
-    return sb.Popen(cmd, stdout=sb.PIPE,shell=True).communicate()[0]
+    return sb.Popen(cmd, stdout=sb.PIPE,shell=True).communicate()[0].decode("utf-8")
 
 
 def sOpen(cmd):

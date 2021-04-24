@@ -2,8 +2,11 @@ from scripts import sCall
 
 def closePorts():
     sCall("sudo fuser -k 3000/tcp")
-    sCall("sudo fuser -k 8080/tcp")
+    sCall("sudo fuser -k 8086/tcp")
 
 if __name__ == '__main__':
     closePorts()
-    sCall("minikube stop")
+    print("Close Minikube?")
+    answer=input().upper()
+    if "Y" in answer:
+    	sCall("minikube stop")

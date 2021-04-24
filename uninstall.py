@@ -1,10 +1,9 @@
 from scripts import sCall, sReturn
 from kubipy.utils import minipy
 
-sCall("kubectl delete svc visualizer-release-grafana visualizer-release-influxdb visualizer-release-telegraf")
+from stopVisual import closePorts
+
+closePorts()
 sCall("kubectl delete statefulsets visualizer-release-influxdb")
 sCall("kubectl delete deployments visualizer-release-grafana visualizer-release-influxdb visualizer-release-telegraf")
-
-#cluster=minipy(False)
-#cluster.stop()
-#cluster.delete()
+sCall("helm uninstall visualizer-release-grafana visualizer-release-influxdb visualizer-release-telegraf")
