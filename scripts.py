@@ -1,4 +1,5 @@
 import os
+import re
 import signal
 import subprocess as sb
 
@@ -9,7 +10,7 @@ def sCall(cmd):
 
 
 def sReturn(cmd):
-    return sb.Popen(cmd, stdout=sb.PIPE,shell=True).communicate()[0].decode("utf-8")
+    return re.sub("[^!-~]+","",sb.Popen(cmd, stdout=sb.PIPE,shell=True).communicate()[0].decode("utf-8")).strip()
 
 
 def sOpen(cmd):
@@ -25,3 +26,10 @@ def getMinikube():
     cluster.start()
     sCall("kubectl config view --raw >~/.kube/config")
     sCall("minikube start")
+
+def getPod(name):
+    return sReturn("kubectl get pods --namespace default | grep "+name+"|awk '{print $1}'")
+
+def runInPod(name,cmd):
+    #print("kubectl exec "+getPod(name)+" "+cmd)
+    print("kubectl exec "+getPod(name)+" -- bash -c '"+cmd+"'")

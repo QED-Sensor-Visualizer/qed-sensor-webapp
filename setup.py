@@ -8,7 +8,7 @@ import shutil
 from kubernetes import client, config
 from avionix import ChartBuilder, ChartInfo, ChartDependency
 
-from scripts import sCall, sReturn, getMinikube
+from scripts import sCall, sReturn, getMinikube, runInPod
 import startVisual
 import stopVisual
 
@@ -36,14 +36,13 @@ sCall("rm get_helm.sh")
 helmV=str(sReturn("helm version"))
 helmV=helmV[helmV.index("Version:")+10:helmV.index("\",")]
 
+print("Generating Helm Charts...")
+
+"""
 if os.path.isdir("./visualizer-release"):
     print("Removing previous installation")
     shutil.rmtree("./visualizer-release")
 else: print("No previous installation was found")
-
-print("Generating Helm Charts...")
-
-"""
 builder = ChartBuilder(
     ChartInfo(
         api_version=helmV,
@@ -84,12 +83,8 @@ sCall("helm repo update")
 sCall("helm install visualizer-release-grafana grafana/grafana")
 sCall("helm install visualizer-release-influxdb bitnami/influxdb")
 sCall("helm install visualizer-release-telegraf influxdata/telegraf")
-sys.exit()
-sCall("helm repo remove grafana")
-sCall("helm repo remove bitnami/influxdb")
-sCall("helm repo remove influxdata/telegraf")
-#builder.install_chart({"dependency-update": None})
+
 sCall("chmod -R +x ./")
-sCall('kubectl exec --namespace default -it -- $(kubectl get pods --namespace default -l "app=grafana,release=grafana" -o jsonpath="{.items[0].metadata.name}") grafana-cli admin reset-admin-password password')
+runInPod("grafana","grafana-cli admin reset-admin-password password")
 
 print("Installation complete!\nRun 'python3 startVisual.py' to start the program")
