@@ -1,7 +1,7 @@
 import webbrowser
 import os
 import json
-from grafana_api.grafana_face import GrafanaFace
+import base64
 
 from scripts import sCall, sOpen, sKill, sReturn, runInPod
 
@@ -37,14 +37,15 @@ if __name__ == '__main__':
         sCall('influx bucket create -n "vis-bucket" -o "vis-org" -t '+token)
         influxIP=sReturn('kubectl get svc --namespace default | grep influx |awk "{print $3}"')
         influxURL="http://"+influxIP+":8086"
-
         print(influxURL)
-        grafana_api = GrafanaFace(
-            auth=("admin","password"),
-            host="http://localhost:3000"
-        )
-        with open("./test.json") as f:
-            data=json.load(f)
-        grafana_api.dashboard.update_dashboard(dashboard={'dashboard': data, 'folderId': 0, 'overwrite': True})
+        
+        sCall('curl -X POST -H "Content-Type: application/json" -d \'{"name":"apiorg"}\' http://admin:password@localhost:3000/api/orgs')
+        sCall('curl -X POST http://admin:password@localhost:3000/api/user/using/2')
+        data=json.loads(sReturn('curl -X POST -H "Content-Type: application/json" -d \'{"name":"apikeycurl", "role": "Admin"}\' http://admin:password@localhost:3000/api/auth/keys'))
+        #print(data)
+        if "key" in data:
+            grafanaToken=data["key"]
+            grafanaToken=json.loads(base64.b64decode(grafanaToken).decode("UTF-8"))["k"]
+            print(grafanaToken)
         
     #webbrowser.open("http://localhost:3000/")

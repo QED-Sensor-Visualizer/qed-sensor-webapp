@@ -32,4 +32,4 @@ def getPod(name):
 
 def runInPod(name,cmd):
     #print("kubectl exec "+getPod(name)+" "+cmd)
-    print("kubectl exec "+getPod(name)+" -- bash -c '"+cmd+"'")
+    sCall("kubectl exec "+getPod(name)+" -- bash -c '"+cmd+"'")
