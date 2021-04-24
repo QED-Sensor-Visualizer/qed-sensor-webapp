@@ -42,10 +42,13 @@ if __name__ == '__main__':
         sCall('curl -X POST -H "Content-Type: application/json" -d \'{"name":"apiorg"}\' http://admin:password@localhost:3000/api/orgs')
         sCall('curl -X POST http://admin:password@localhost:3000/api/user/using/2')
         data=json.loads(sReturn('curl -X POST -H "Content-Type: application/json" -d \'{"name":"apikeycurl", "role": "Admin"}\' http://admin:password@localhost:3000/api/auth/keys'))
-        #print(data)
         if "key" in data:
-            grafanaToken=data["key"]
-            grafanaToken=json.loads(base64.b64decode(grafanaToken).decode("UTF-8"))["k"]
-            print(grafanaToken)
+            grafanaToken=json.loads(base64.b64decode(data["key"]).decode("UTF-8"))["k"]
+            print("Grafana Admin Token: "+grafanaToken)
+
+        with open('./payload.json') as f:
+            payload=json.dumps(json.load(f))
+        print(sReturn('curl -X POST --insecure -H "Authorization: Bearer '+data["key"]+'" -H "Content-Type: application/json" -d '+ payload +' http://admin:password@localhost:3000/api/dashboards/db'))
         
-    #webbrowser.open("http://localhost:3000/")
+    print("\nGrafana Username: 'admin'\nGrafana Password: 'password'")
+    webbrowser.open("http://localhost:3000/")

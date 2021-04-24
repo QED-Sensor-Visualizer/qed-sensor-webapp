@@ -1,4 +1,5 @@
 kubernetes
 avionix
+kubipy
 requests
 grafana-api
