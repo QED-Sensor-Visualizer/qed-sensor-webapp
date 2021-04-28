@@ -22,6 +22,7 @@ if __name__ == '__main__':
         token=sReturn('kubectl get secret visualizer-release-influxdb -o jsonpath="{.data.admin-user-token}" | base64 --decode')
         os.environ["INFLUX_TOKEN"]=token #temporary - os can't permanently change variables
         print("InfluxDB Admin Token: "+token)
+        print("InfluxDB Admin Username: admin")
         password=sReturn('kubectl get secret visualizer-release-influxdb -o jsonpath="{.data.admin-user-password}" | base64 --decode')
         os.environ["INFLUX_PASSWORD"]=password
         print("InfluxDB Admin Password: "+password)
@@ -38,6 +39,8 @@ if __name__ == '__main__':
         influxIP=sReturn('kubectl get svc --namespace default | grep influx |awk "{print $3}"')
         influxURL="http://"+influxIP+":8086"
         print(influxURL)
+        
+        runInPod("grafana","grafana-cli plugins install grafana-worldmap-panel")
         
         sCall('curl -X POST -H "Content-Type: application/json" -d \'{"name":"apiorg"}\' http://admin:password@localhost:3000/api/orgs')
         sCall('curl -X POST http://admin:password@localhost:3000/api/user/using/2')
