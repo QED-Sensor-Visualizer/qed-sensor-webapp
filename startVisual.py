@@ -71,24 +71,40 @@ if __name__ == '__main__':
             grafanaToken = json.loads(base64.b64decode(
                 data["key"]).decode("UTF-8"))["k"]
             print("Grafana Admin Token: "+grafanaToken)
-            with open('./source.json') as f:
-                rawJson = json.load(f)
-                rawJson["url"] = influxIP
-                payload = json.dumps(rawJson)
-            print(sReturn('curl -X POST --insecure -H "Content-Type: application/json" -d \'' +
-                  payload + '\' http://admin:password@localhost:3000/api/dashboards/db'))
+
             headers = {"Accept": "application/json","Content-Type": "application/json"}
+            datasource = {
+                "name":"InfluxDB",
+                "type":"influxdb",
+                "url":influxIP,
+                "access":"proxy",
+                "isDefault":True,
+                "basicAuth":True,
+                "basicAuthUser": "admin",
+                "jsonData": {
+                    "org":"vis-org",
+                    "organization":"vis-org",
+                    "defaultBucket":"vis-bucket",
+                    "version":"Flux"
+                },
+                "secureJsonData":{
+                    "basicAuthPassword": "password",
+                    "password":"password",
+                    "token":token
+                },
+                "secureJsonFields":{}
+            }
+            req.post("http://admin:password@localhost:3000/api/datasources", headers=headers, json=datasource)
             dashboard = {"id": None,
-                "title": "Sensor Data",
+                "title": "Sensor Dataf",
                 "tags": ["vis-autoGen"],
                 "timezone": "browser",
                 "rows": [{}],
                 "schemaVersion": 6,
-                "version": 0
+                "version": 0,
+                "panels":[]
             }
-            payload = {"dashboard": dashboard}
-            url = "http://admin:password@localhost:3000/api/dashboards/db"
-            p = req.post(url, headers=headers, json=payload)
+            req.post("http://admin:password@localhost:3000/api/dashboards/db", headers=headers, json={"dashboard": dashboard})
 
     print("\nGrafana Username: 'admin'\nGrafana Password: 'password'")
-    # webbrowser.open("http://localhost:3000/")
+    webbrowser.open("http://localhost:3000/")
