@@ -68,7 +68,8 @@ if __name__ == '__main__':
             'curl -X POST -H "Content-Type: application/json" -d \'{"name":"apikeycurl", "role": "Admin"}\' http://admin:password@localhost:3000/api/auth/keys'))
 
         if "key" in data:
-            grafanaToken = json.loads(base64.b64decode(data["key"]).decode("UTF-8"))["k"]
+            grafanaToken = json.loads(base64.b64decode(
+                data["key"]).decode("UTF-8"))["k"]
             print("Grafana Admin Token: "+grafanaToken)
             with open('./source.json') as f:
                 rawJson = json.load(f)
@@ -76,15 +77,18 @@ if __name__ == '__main__':
                 payload = json.dumps(rawJson)
             print(sReturn('curl -X POST --insecure -H "Content-Type: application/json" -d \'' +
                   payload + '\' http://admin:password@localhost:3000/api/dashboards/db'))
-
-            headers = {
-                'Content-type': 'application/json',
-                'Authorization': 'Bearer '+grafanaToken
+            headers = {"Accept": "application/json","Content-Type": "application/json"}
+            dashboard = {"id": None,
+                "title": "Sensor Data",
+                "tags": ["vis-autoGen"],
+                "timezone": "browser",
+                "rows": [{}],
+                "schemaVersion": 6,
+                "version": 0
             }
-            with open('./payload.json') as f:
-                    payload = json.load(f)
-            print(
-                req.post('http://admin:password@localhost:3000/api/datasources', data=payload,headers=headers))
+            payload = {"dashboard": dashboard}
+            url = "http://admin:password@localhost:3000/api/dashboards/db"
+            p = req.post(url, headers=headers, json=payload)
 
     print("\nGrafana Username: 'admin'\nGrafana Password: 'password'")
     # webbrowser.open("http://localhost:3000/")
