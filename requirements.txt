@@ -3,3 +3,4 @@ avionix
 kubipy
 requests
 grafana-api
+pexpect

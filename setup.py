@@ -27,54 +27,15 @@ if len(sys.argv)==0 or not "--skipMinikube" in sys.argv:
     kubStatus()
 
 print("Checking Helm...")
-sCall("curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3")
-sCall("chmod 700 get_helm.sh")
-sCall("./get_helm.sh")
-sCall("rm get_helm.sh")
-
-
+if sReturn("helm").index("ubernetes")==-1:
+    sCall("curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3")
+    sCall("chmod 700 get_helm.sh")
+    sCall("./get_helm.sh")
+    sCall("rm get_helm.sh")
 helmV=str(sReturn("helm version"))
 helmV=helmV[helmV.index("Version:")+10:helmV.index("\",")]
 
 print("Generating Helm Charts...")
-
-"""
-if os.path.isdir("./visualizer-release"):
-    print("Removing previous installation")
-    shutil.rmtree("./visualizer-release")
-else: print("No previous installation was found")
-builder = ChartBuilder(
-    ChartInfo(
-        api_version=helmV,
-        name="visualizer-release",
-        version="0.1.0",
-        app_version="v2",
-        dependencies=[
-                ChartDependency(
-                    "grafana",
-                    "6.7.3",
-                    "https://grafana.github.io/helm-charts",
-                    "helm-charts"
-                    #values={"admin":{"userKey":"admin","passwordKey":"password"}}
-                ),
-                ChartDependency(
-                    "influxdb",
-                    "2.2.1",
-                    "https://charts.bitnami.com/bitnami",
-                    "bitnami/influxdb"
-                ),
-                ChartDependency(
-                    "telegraf",
-                    "1.7.38",
-                    "https://influxdata.github.io/helm-charts",
-                    "influxdata/telegraf"
-                )
-        ],
-    ),
-    [],
-)
-"""
-
 sCall("helm repo add grafana https://grafana.github.io/helm-charts")
 sCall("helm repo add bitnami https://charts.bitnami.com/bitnami")
 sCall("helm repo add influxdata https://influxdata.github.io/helm-charts")
