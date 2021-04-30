@@ -1,0 +1,21 @@
+{
+    "name": "InfluxDB",
+    "type": "influxdb",
+    "access": "proxy",
+    "isDefault": true,
+    "basicAuth": true,
+    "basicAuthUser": "admin",
+    "jsonData": {
+        "org": "vis-org",
+        "organization": "vis-org",
+        "defaultBucket": "vis-bucket",
+        "version": "Flux"
+    },
+    "secureJsonData": {
+        "basicAuthPassword": "password",
+        "password": "password",
+        "token": "Z07RMYp3xyimMdOkYgcZ"
+    },
+    "secureJsonFields": {},
+    "url": "http://10.97.200.171:8086"
+}

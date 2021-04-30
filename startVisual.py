@@ -5,7 +5,7 @@ import base64
 import pexpect
 import requests as req
 
-from scripts import sCall, sOpen, sKill, sReturn, runInPod
+from scripts import sCall, sOpen, sKill, sReturn, runInPod, uploadDashboard
 
 
 def openPorts():
@@ -27,7 +27,6 @@ if __name__ == '__main__':
         token = sReturn(
             'kubectl get secret visualizer-release-influxdb -o jsonpath="{.data.admin-user-token}" | base64 --decode')
         # temporary - os can't permanently change variables
-        os.environ["INFLUX_TOKEN"] = token
         print("InfluxDB Admin Token: "+token)
         print("InfluxDB Admin Username: admin")
 
@@ -50,8 +49,8 @@ if __name__ == '__main__':
         sCall('influx config create -n default -t ' +
               token+' -a -u http://localhost:8086')
         sCall('influx config default')
-        sCall('influx org create -n vis-org')
-        sCall('influx auth create --read-buckets --read-checks --read-dashboards --read-dbrps --read-notificationEndpoints --read-notificationRules --read-orgs --read-tasks --read-telegrafs --read-user --write-buckets --write-checks --write-dashboards --write-dbrps --write-notificationEndpoints --write-notificationRules --write-orgs --write-tasks --write-telegrafs --write-user')
+        sCall('influx org create -n vis-org -t '+token)
+        sCall('influx auth create --read-buckets --read-checks --read-dashboards --read-dbrps --read-notificationEndpoints --read-notificationRules --read-orgs --read-tasks --read-telegrafs --read-user --write-buckets --write-checks --write-dashboards --write-dbrps --write-notificationEndpoints --write-notificationRules --write-orgs --write-tasks --write-telegrafs --write-user -o vis-org -t '+token)
 
         sCall('influx bucket create -n "vis-bucket" -o "vis-org" -t '+token)
         influxIP = sReturn('kubectl get svc --namespace default | grep influx')
@@ -60,6 +59,7 @@ if __name__ == '__main__':
         print("InfluxDB URL: "+influxIP)
 
         runInPod("grafana", "grafana-cli plugins install grafana-worldmap-panel")
+        runInPod("grafana", "grafana-cli plugins install innius-video-panel")
 
         sCall(
             'curl -X POST -H "Content-Type: application/json" -d \'{"name":"apiorg"}\' http://admin:password@localhost:3000/api/orgs')
@@ -72,39 +72,18 @@ if __name__ == '__main__':
                 data["key"]).decode("UTF-8"))["k"]
             print("Grafana Admin Token: "+grafanaToken)
 
-            headers = {"Accept": "application/json","Content-Type": "application/json"}
-            datasource = {
-                "name":"InfluxDB",
-                "type":"influxdb",
-                "url":influxIP,
-                "access":"proxy",
-                "isDefault":True,
-                "basicAuth":True,
-                "basicAuthUser": "admin",
-                "jsonData": {
-                    "org":"vis-org",
-                    "organization":"vis-org",
-                    "defaultBucket":"vis-bucket",
-                    "version":"Flux"
-                },
-                "secureJsonData":{
-                    "basicAuthPassword": "password",
-                    "password":"password",
-                    "token":token
-                },
-                "secureJsonFields":{}
-            }
-            req.post("http://admin:password@localhost:3000/api/datasources", headers=headers, json=datasource)
-            dashboard = {"id": None,
-                "title": "Sensor Data",
-                "tags": ["vis-autoGen"],
-                "timezone": "browser",
-                "rows": [{}],
-                "schemaVersion": 6,
-                "version": 0,
-                "panels":[]
-            }
-            req.post("http://admin:password@localhost:3000/api/dashboards/db", headers=headers, json={"dashboard": dashboard})
+        if True:
+            with open("grafanaData/header.json") as f: header = json.load(f)
+            with open("grafanaData/datasource.json", "r+") as f: 
+                data = json.load(f)
+                data["url"]=influxIP
+                data["secureJsonData"]["token"]=token
+                f.seek(0)
+                f.truncate()
+                json.dump(data, f, ensure_ascii=False, indent=4)
+            with open("grafanaData/datasource.json") as f: datasource = json.load(f)
+            req.post("http://admin:password@localhost:3000/api/datasources", headers=header, json=datasource)
+            uploadDashboard()
 
     print("\nGrafana Username: 'admin'\nGrafana Password: 'password'")
-    webbrowser.open("http://localhost:3000/")
+    #webbrowser.open("http://localhost:3000/dashboards")

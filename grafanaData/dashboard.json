@@ -1,0 +1,41 @@
+{
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "InfluxDB",
+                    "enable":true,
+                    "hide":true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable":true,
+        "gnetId":null,
+        "graphTooltip": 0,
+        "id":null,
+        "links": [],
+        "schemaVersion": 27,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": []
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "Sensor Dashboard",
+        "uid": "",
+        "version": 0,
+        "hideControls":false
+    },
+    "message": "",
+    "overwrite":true,
+    "folderId": 0
+}

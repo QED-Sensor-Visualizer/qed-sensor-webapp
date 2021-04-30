@@ -1,6 +1,8 @@
 import os
 import re
 import signal
+import json
+import requests as req
 import subprocess as sb
 
 from kubipy.utils import minipy
@@ -33,3 +35,10 @@ def getPod(name):
 def runInPod(name,cmd):
     #print("kubectl exec "+getPod(name)+" "+cmd)
     sCall("kubectl exec "+getPod(name)+" -- bash -c '"+cmd+"'")
+
+def uploadDashboard():
+    with open("grafanaData/header.json") as f: header = json.load(f)
+    with open("grafanaData/dashboard.json") as f: dashboard = json.load(f)
+    with open("grafanaData/panel.json") as f: dashboard["panels"] = [json.load(f)]
+    p=req.post("http://admin:password@localhost:3000/api/dashboards/db", headers=header, json=dashboard)
+    return(p)
