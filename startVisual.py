@@ -96,7 +96,7 @@ if __name__ == '__main__':
             }
             req.post("http://admin:password@localhost:3000/api/datasources", headers=headers, json=datasource)
             dashboard = {"id": None,
-                "title": "Sensor Dataf",
+                "title": "Sensor Data",
                 "tags": ["vis-autoGen"],
                 "timezone": "browser",
                 "rows": [{}],
