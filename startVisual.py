@@ -58,9 +58,6 @@ if __name__ == '__main__':
             influxIP[influxIP.find("IP")+2:influxIP.find("<")]+":8086"
         print("InfluxDB URL: "+influxIP)
 
-        runInPod("grafana", "grafana-cli plugins install grafana-worldmap-panel")
-        runInPod("grafana", "grafana-cli plugins install innius-video-panel")
-
         sCall(
             'curl -X POST -H "Content-Type: application/json" -d \'{"name":"apiorg"}\' http://admin:password@localhost:3000/api/orgs')
         sCall('curl -X POST http://admin:password@localhost:3000/api/user/using/2')

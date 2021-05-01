@@ -34,7 +34,7 @@ def getPod(name):
 
 def runInPod(name,cmd):
     #print("kubectl exec "+getPod(name)+" "+cmd)
-    sCall("kubectl exec "+getPod(name)+" -- bash -c '"+cmd+"'")
+    return sReturn("kubectl exec "+getPod(name)+" -- bash -c '"+cmd+"'")
 
 def uploadDashboard():
     with open("grafanaData/header.json") as f: header = json.load(f)
