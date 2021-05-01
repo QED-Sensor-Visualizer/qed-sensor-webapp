@@ -86,4 +86,4 @@ if __name__ == '__main__':
             uploadDashboard()
 
     print("\nGrafana Username: 'admin'\nGrafana Password: 'password'")
-    #webbrowser.open("http://localhost:3000/dashboards")
+    webbrowser.open("http://localhost:3000/dashboards")
