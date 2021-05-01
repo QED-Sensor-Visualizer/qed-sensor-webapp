@@ -14,8 +14,8 @@
     "secureJsonData": {
         "basicAuthPassword": "password",
         "password": "password",
-        "token": "g9Smivq5qLsBmKJetySn"
+        "token": "3mx91rjXWpdrChuDhpXQ"
     },
     "secureJsonFields": {},
-    "url": "http://10.105.254.214:8086"
+    "url": "http://10.107.37.210:8086"
 }

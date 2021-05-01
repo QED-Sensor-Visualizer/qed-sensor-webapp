@@ -83,7 +83,7 @@ if __name__ == '__main__':
                 json.dump(data, f, ensure_ascii=False, indent=4)
             with open("grafanaData/datasource.json") as f: datasource = json.load(f)
             req.post("http://admin:password@localhost:3000/api/datasources", headers=header, json=datasource)
-            uploadDashboard()
+            print(uploadDashboard())
 
     print("\nGrafana Username: 'admin'\nGrafana Password: 'password'")
     webbrowser.open("http://localhost:3000/dashboards")

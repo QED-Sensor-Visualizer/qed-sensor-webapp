@@ -39,6 +39,5 @@ def runInPod(name,cmd):
 def uploadDashboard():
     with open("grafanaData/header.json") as f: header = json.load(f)
     with open("grafanaData/dashboard.json") as f: dashboard = json.load(f)
-    with open("grafanaData/panel.json") as f: dashboard["panels"] = [json.load(f)]
     p=req.post("http://admin:password@localhost:3000/api/dashboards/db", headers=header, json=dashboard)
     return(p)

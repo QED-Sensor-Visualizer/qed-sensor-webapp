@@ -19,9 +19,9 @@ if end != "":
 sCall('influx  write -t '+token+' -o vis-org -b vis-bucket -f '+filename +
       ' --header "#constant measurement, abc" --header "#datatype dateTime:RFC3339,double,tag"')
 
-data = {"targets": [{
+data = {"panels":[{"targets": [{
     "query": "from(bucket:\"vis-bucket\")\n|> range("+rangeStr+")\n|> yield()"
-}]}
-with open("grafanaData/panel.json", "w") as f:
+}]}]}
+with open("grafanaData/dashboard.json", "w") as f:
     json.dump(data, f, ensure_ascii=False, indent=4)
 uploadDashboard()
