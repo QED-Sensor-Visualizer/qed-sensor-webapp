@@ -82,7 +82,7 @@
                         ],
                         "orderByTime": "ASC",
                         "policy": "default",
-                        "query": "from(bucket:\"vis-bucket\")\n|> range(start:-1h)\n|> yield()",
+                        "query": "from(bucket:\"vis-bucket\")\n|> range(start: 2020-02-10T00:00:00Z end: 2020-04-10T00:00:00Z)\n|> yield()",
                         "refId": "A",
                         "resultFormat": "time_series",
                         "select": [
@@ -159,7 +159,7 @@
         "title": "Sensor Dashboard",
         "version": 1
     },
-    "folderId":0,
-    "message":"",
-    "overwrite":true
+    "folderId": 0,
+    "message": "",
+    "overwrite": true
 }

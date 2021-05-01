@@ -45,7 +45,4 @@ sCall("helm install visualizer-release-grafana grafana/grafana")
 sCall("helm install visualizer-release-influxdb bitnami/influxdb")
 sCall("helm install visualizer-release-telegraf influxdata/telegraf")
 
-sCall("chmod -R +x ./")
-runInPod("grafana","grafana-cli admin reset-admin-password password")
-
 print("Installation complete!\nRun 'python3 startVisual.py' to start the program")

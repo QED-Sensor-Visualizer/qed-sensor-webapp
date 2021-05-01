@@ -1,8 +1,0 @@
-﻿#group,FALSE,FALSE,TRUE,TRUE,FALSE,FALSE,TRUE,TRUE,TRUE
-#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,string
-#default,_result,,,,,,,,
-,result,table,_start,_stop,_time,_value,_field,_measurement,location
-,,0,1920-03-05T22:10:01.711964667Z,2020-03-05T22:10:01.711964667Z,2019-08-17T00:00:00Z,82,degrees,average_temperature,coyote_creek
-,,0,1920-03-05T22:10:01.711964667Z,2020-03-05T22:10:01.711964667Z,2019-08-17T00:06:00Z,73,degrees,average_temperature,coyote_creek
-,,0,1920-03-05T22:10:01.711964667Z,2020-03-05T22:10:01.711964667Z,2019-08-17T00:12:00Z,86,degrees,average_temperature,coyote_creek
-,,0,1920-03-05T22:10:01.711964667Z,2020-03-05T22:10:01.711964667Z,2019-08-17T00:18:00Z,89,degrees,average_temperature,coyote_creek

@@ -22,7 +22,7 @@ if __name__ == '__main__':
         exit()
 
     openPorts()
-    if ''.join(filter(str.isalpha, sReturn("echo $INFLUX_TOKEN"))) == "":
+    if not "default" in sReturn("influx config list"):
         print("Setting up InfluxDB Auth")
         token = sReturn(
             'kubectl get secret visualizer-release-influxdb -o jsonpath="{.data.admin-user-token}" | base64 --decode')
@@ -50,7 +50,7 @@ if __name__ == '__main__':
               token+' -a -u http://localhost:8086')
         sCall('influx config default')
         sCall('influx org create -n vis-org -t '+token)
-        sCall('influx auth create --read-buckets --read-checks --read-dashboards --read-dbrps --read-notificationEndpoints --read-notificationRules --read-orgs --read-tasks --read-telegrafs --read-user --write-buckets --write-checks --write-dashboards --write-dbrps --write-notificationEndpoints --write-notificationRules --write-orgs --write-tasks --write-telegrafs --write-user -o vis-org -t '+token)
+        p=sReturn('influx auth create --read-buckets --read-checks --read-dashboards --read-dbrps --read-notificationEndpoints --read-notificationRules --read-orgs --read-tasks --read-telegrafs --read-user --write-buckets --write-checks --write-dashboards --write-dbrps --write-notificationEndpoints --write-notificationRules --write-orgs --write-tasks --write-telegrafs --write-user -o vis-org -t '+token)
 
         sCall('influx bucket create -n "vis-bucket" -o "vis-org" -t '+token)
         influxIP = sReturn('kubectl get svc --namespace default | grep influx')
@@ -58,6 +58,7 @@ if __name__ == '__main__':
             influxIP[influxIP.find("IP")+2:influxIP.find("<")]+":8086"
         print("InfluxDB URL: "+influxIP)
 
+        runInPod("grafana", "grafana-cli admin reset-admin-password password")
         sCall(
             'curl -X POST -H "Content-Type: application/json" -d \'{"name":"apiorg"}\' http://admin:password@localhost:3000/api/orgs')
         sCall('curl -X POST http://admin:password@localhost:3000/api/user/using/2')
@@ -68,8 +69,6 @@ if __name__ == '__main__':
             grafanaToken = json.loads(base64.b64decode(
                 data["key"]).decode("UTF-8"))["k"]
             print("Grafana Admin Token: "+grafanaToken)
-
-        if True:
             with open("grafanaData/header.json") as f: header = json.load(f)
             with open("grafanaData/datasource.json", "r+") as f: 
                 data = json.load(f)

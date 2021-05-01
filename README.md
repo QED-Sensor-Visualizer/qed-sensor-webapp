@@ -31,12 +31,15 @@ This script verifies your Helm installation and generates an umbrella chart cont
 
 ```bash
 Grafana:
-   admin.adminKey: admin
-   admin.passwordKey: password
+   Admin Password: admin
+   Admin Password: password
 
 InfluxDB:
    Default Organization: vis-org
+   Default Bucket: vis-bucket
 ```
+
+Additional info, including the InfluxDB admin token, can be found in `grafanaData/datasource.json`
 
 ## Usage
 
